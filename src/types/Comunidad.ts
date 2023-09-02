@@ -1,14 +1,21 @@
 import express from 'express';
 import Joi from 'joi';
 
+
+
 type Comunidad  = {
     id: number;
     nombre: string;
     establecimientos: Establecimiento[];
 }
 
-type Establecimiento = {
-    id: string;
+export type Establecimiento = {
+    id: number;
+    servicios: Servicio[];
+}
+
+export type Servicio = {
+    id: number;
 }
 
 const comunidadSchema = Joi.object({
@@ -16,7 +23,10 @@ const comunidadSchema = Joi.object({
         nombre: Joi.string().required(),
         id: Joi.number().required(),
         establecimientos: Joi.array().items(Joi.object({
-            id: Joi.string()
+            id: Joi.string().required(),
+            servicios: Joi.array().items(Joi.object({
+                id: Joi.number().required()
+            })).required()
         })).required()
     })).required()
 });
