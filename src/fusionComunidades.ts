@@ -22,15 +22,15 @@ export function sugerirFusionComunidad (comunidades: Comunidad[]){
                 //agrupamos las comunidades a la propuestas
                 comunidadesCompatibles.push([comunidades[i], comunidadAux]); // [[a,j],[d,e],[a,e]] => [[a,j,e],[d,e]]
                 
-
-                //console.log(comunidadesCompatibles);
-
+                //TODO Hacerle un flat a la lista de comunidadesCompatibles aka [[a,j],[a,e],[a,c]] => [[a,j,e],[a,c]]
+                //capaz una lista aoarte que tenga las comuniades iniciales y vas borrando de esa lista a medida que vas agregando a la lista de compatibles
             }
         }
 
         console.log("Se termino de analizar la comunidad " + comunidades[i].nombre);
     
 
+    
     }
 
     if(comunidadesCompatibles.length == 0){
