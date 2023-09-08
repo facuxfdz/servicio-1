@@ -13,7 +13,7 @@ app.use(express.json());
 // Routes
 app.get('/servicio-1', validateComunidad,(req, res) => {
     const comunidades : Comunidad[] = req.body.comunidades;
-    console.log(comunidades)
+    //console.log(comunidades)
     res.json(req.body);
     sugerirFusionComunidad(comunidades);
 });
