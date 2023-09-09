@@ -27,6 +27,8 @@ app.get('/aceptar-fusion', (req,res) => {
 
 app.get('/rechazar-fusion', (req,res) => {
     // registrar en mi sistema la fusion como "ya la propuse en esta fecha (fecha rechazo), para tener en cuenta despues en la proxima generacion de propuestas de fusion"
+    const comunidades: Comunidad[] = req.body.comunidades;
+    res.json();
 });
 
 // End of routes

@@ -1,26 +1,33 @@
+import { func } from "joi";
 import Comunidad, { Establecimiento, Servicio } from "./types/Comunidad";
+import PropuestaFusion from './types/PropuestaFusion';
+import { getUltimaFechaPropuesta } from "./fechasPropuestas";
 
 export function sugerirFusionComunidad (comunidades: Comunidad[]){
 
-    const comunidadesCompatibles: Comunidad[][] = [];//[[a,b]]
+
+    const comunidadesCompatibles: Comunidad[][] = []; //[[a,b]]
     let comunidadesAuxiliar: Comunidad[][] = [];
-    let comunidadesSinPropuestas: Comunidad[] = [];//[a,b]
+    let comunidadesSinPropuestas: Comunidad[] = []; //[a,b]
 
     comunidadesSinPropuestas = comunidades; //aca hacemos la copia de comunidades
 
     //TODO: SE PUEDE HACER UNA TOTAL DE COMUNDIADES DONDE CADA VE QUE REALIZAMOS UNA PROPUESAT BORRAMOS LA COMUNIDAD DE LA LISTA. ERGO SI NO ESTA EN LA LISTA YA ESTA EN UNA PROPUESTA
     
-    // 
-    for(let i = 0; i < comunidades.length-1 ; i++){ //[a,b,c,d] => [a,b] [b,c] [c,d] 
+    //
+    for(let i = 0; i < comunidades.length-1 ; i++){ //[a,b,c,d] => [a,b] [b,c] 
         let comunidadAux; //= comunidades[i+1];
         
-        //Aca vemos que no se repita el elemento a intentar fusionar
-        if(comunidadesSinPropuestas.includes(comunidades[i])){
+        //Aca vemos que no se repita el elemento a intentar fusionar y que no haya sido usado en 6 meses y que este activa
+        //[a,b] [d,a]
+        //[a,c] si se puede
+        if(comunidadesSinPropuestas.includes(comunidades[i]) && !tuvoPropuestaRechazadaReciente(comunidades[i])){ 
 
             for(let j = i+1; j <= comunidades.length-1; j++){ //[a,b,c,d,e] => [a,b] [a,c] [a,d] [a,e] VA EL -1?????????????????????????'
                 comunidadAux = comunidades[j];
                 //Van a ser ingenieros no pueden preguntar eso, ayudame loco
                 //verificar que i no este dentro de la lista de compatibles
+                
 
                 if(cumpleTodasLasCondiciones(comunidades[i], comunidadAux)){
 
@@ -74,8 +81,28 @@ export function sugerirFusionComunidad (comunidades: Comunidad[]){
     }
 
     //retornar las comunidades que estan en la lista de propuestas
-    return comunidadesCompatibles;
+
+    return comunidadesCompatibles; //ACA RETORNA PROPUESTA DEFINITIVA 
 }
+
+function tuvoPropuestaRechazadaReciente(comunidad: Comunidad) : boolean {
+    const fechaUltimaPropuestaFusion : string | null = getUltimaFechaPropuesta(comunidad); 
+    if (fechaUltimaPropuestaFusion === null) return false;
+
+    const fechaHoy = new Date().toISOString().split('T')[0]; // La fecha y hora actual
+    const ultPropDate = new Date(fechaUltimaPropuestaFusion);
+    const hoyDate = new Date(fechaHoy);
+
+    // Calculamos la diferencia de tiempo en milisegundos entre las dos fechas.
+    const milisegundosEnUnMes = 1000 * 60 * 60 * 24 * 30.44; // Aproximadamente el promedio de días en un mes
+    const diferenciaTiempo: number = hoyDate.getTime() - ultPropDate.getTime();
+    const diferenciaEnMeses = Math.round(diferenciaTiempo / milisegundosEnUnMes);
+
+    return diferenciaTiempo > 6;
+}
+
+//HELP.
+
 
 
 
@@ -108,6 +135,8 @@ function armadoDeListaFinal(compatibilidades: Comunidad[][]){ //[[a,b],[a,c]]
         console.log("Solo hay una comunidad para fusionar");
         listadoFinal.push(compatibilidades[0][1]);//este seria b
     }
+    
+  
 
     return listadoFinal;
             
@@ -129,7 +158,6 @@ function cumpleTodasLasCondiciones(comunidad1: Comunidad, comunidad2: Comunidad)
  *  fusionesPosta.add(fusion);
  * }
  * }
- * 
 */
 
 function coincidenEstablecimientos (comunidad1: Comunidad, comunidad2: Comunidad){
