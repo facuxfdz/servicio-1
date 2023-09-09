@@ -4,6 +4,7 @@ import PropuestaFusion from './types/PropuestaFusion';
 import { generarPropuestaFusion } from './fusionComunidades';
 import CriterioFusion from './criteriosFusion/CriterioFusion';
 import CriterioCoincidenciaEstablecimientos from './criteriosFusion/CriterioCoincidenciaEstablecimientos';
+import CriterioCoincidenciaServicios from './criteriosFusion/CriterioCoincidenciaServicios';
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.use(express.json());
 // Routes
 app.get('/fusiones-comunidades', validateComunidad,(req, res) => {
     const comunidades : Comunidad[] = req.body.comunidades;
-    const criteriosFusion : CriterioFusion[] = [new CriterioCoincidenciaEstablecimientos()];
+    const criteriosFusion : CriterioFusion[] = [new CriterioCoincidenciaEstablecimientos(),new CriterioCoincidenciaServicios()];
     const propuestasDeFusion: PropuestaFusion[] = generarPropuestaFusion(comunidades,criteriosFusion);
     res.json(propuestasDeFusion);
 });
