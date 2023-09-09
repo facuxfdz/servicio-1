@@ -11,20 +11,30 @@ export function fusionarComunidades(comunidades: Comunidad[]){ //[a,b,c]
         nombre: comunidades.map((comunidad) => comunidad.nombre).join(", "), // Concatenamos los nombres, separados por coma
         establecimientos: [], // Inicialmente vacío
         usuarios: [], // Inicialmente vacío
+        activo: true, 
     };
 
 
     for (const comunidad of comunidades) {
         comunidadFusionada.establecimientos = comunidadFusionada.establecimientos.concat(comunidad.establecimientos);
         comunidadFusionada.usuarios = comunidadFusionada.usuarios.concat(comunidad.usuarios);
+        comunidad.activo = false;
 
+        //console.log("La comunidad "+ comunidad.id + "con establecimiento"+comunidad.establecimientos+ "usuarios " +comunidad.usuarios +"esta " + comunidad.activo);
+
+        // console.log(comunidadFusionada.establecimientos);
+        // console.log(comunidadFusionada.usuarios);
+        // console.log(comunidadFusionada.activo);
     }
     
+    //eliminarDuplicadosEstablecimientos(comunidadFusionada);
 
    comunidadFusionada.usuarios = eliminarDuplicadosUsuarios(comunidadFusionada);
    comunidadFusionada.establecimientos = eliminarDuplicadosEstablecimientos(comunidadFusionada); 
  
-   return comunidadFusionada;
+   
+
+    return comunidadFusionada;
 }
 
 
