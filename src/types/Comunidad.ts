@@ -8,17 +8,17 @@ type Comunidad  = {
     usuarios: Usuario[]
 }
 
-type Establecimiento = {
+export type Establecimiento = {
     id: number;
     servicios: Servicio[];
 }
 
-type Usuario = {
+export type Usuario = {
     id: number;
     nombre: string;
 }
 
-type Servicio = {
+export type Servicio = {
     id: number;
 }
 

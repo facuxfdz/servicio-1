@@ -1,7 +1,8 @@
-import CriterioFusion from "./criteriosFusion/CriterioFusion";
-import Comunidad from "./types/Comunidad";
-import PropuestaFusion from "./types/PropuestaFusion"
-import { generarId } from "./utils/generadorIdPropuestas";
+import CriterioFusion from "../criteriosFusion/CriterioFusion";
+import Comunidad from "../types/Comunidad";
+import PropuestaFusion from "../types/PropuestaFusion"
+import { generarId } from "../utils/generadorIdPropuestas";
+import { save } from "./propuestasStorage";
 
 interface PropuestaFusionRecord {
     propuesta: PropuestaFusion;
@@ -38,6 +39,7 @@ export function generarPropuestaFusion(comunidades: Comunidad[], criterios: Crit
                     propuestasRegistradas.set(propuestaId, { propuesta, fechaGeneracion });
                     // Agregar la propuesta al resultado
                     propuestasDeFusion.push(propuesta);
+                    save(propuesta);
                 }else{
                     console.log(`Ya existe una propuesta similar a la propuesta ${propuestaId}`);
                 }
