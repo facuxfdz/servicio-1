@@ -1,5 +1,7 @@
 import express from 'express';
 import Comunidad, { validateComunidad } from './types/Comunidad';
+import PropuestaFusion from './types/PropuestaFusion';
+import { generarPropuestaFusion } from './fusionComunidades';
 
 const app = express();
 
@@ -11,8 +13,8 @@ app.use(express.json());
 // Routes
 app.get('/fusiones-comunidades', validateComunidad,(req, res) => {
     const comunidades : Comunidad[] = req.body.comunidades;
-    console.log(comunidades)
-    res.json(req.body);
+    const propuestasDeFusion: PropuestaFusion[] = generarPropuestaFusion(comunidades);
+    res.json(propuestasDeFusion);
 });
 
 // End of routes
