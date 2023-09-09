@@ -2,6 +2,7 @@ import express from 'express';
 import Joi from 'joi';
 import Comunidad, { validateComunidad } from './types/Comunidad';
 import { sugerirFusionComunidad } from './fusionComunidades';
+import { fusionarComunidades } from './aceptaFusion';
 
 const app = express();
 
@@ -11,11 +12,21 @@ app.use(express.json());
 // End of express middlewares
 
 // Routes
-app.get('/servicio-1', validateComunidad,(req, res) => {
+app.get('/fusion', validateComunidad,(req, res) => {
     const comunidades : Comunidad[] = req.body.comunidades;
+    
     //console.log(comunidades)
-    res.json(req.body);
-    sugerirFusionComunidad(comunidades);
+    res.json(sugerirFusionComunidad(comunidades));
+});
+
+app.get('/aceptar-fusion', (req,res) => {
+    // devolver la comunidad resultante de fusionar con la propuesta que mandaron
+    const comunidades : Comunidad[] = req.body.comunidades;
+    res.json(fusionarComunidades(comunidades));
+});
+
+app.get('/rechazar-fusion', (req,res) => {
+    // registrar en mi sistema la fusion como "ya la propuse en esta fecha (fecha rechazo), para tener en cuenta despues en la proxima generacion de propuestas de fusion"
 });
 
 // End of routes

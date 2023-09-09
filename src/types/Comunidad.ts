@@ -9,6 +9,7 @@ type Comunidad  = {
     nombre: string;
     establecimientos: Establecimiento[];
     usuarios: Usuario[];
+    activo: boolean;
 }
 
 export type Establecimiento = {
@@ -42,7 +43,8 @@ const comunidadSchema = Joi.object({
             nombre: Joi.string().required(),
             email: Joi.string().required(),
             password: Joi.string().required()
-        })).required()
+        })).required(),
+        activo: Joi.boolean().required()
     })).required()
 });
 
@@ -59,7 +61,8 @@ export const validateComunidad = (req: express.Request, res: express.Response, n
         id: parseInt(comunidad.id.toString()),
         nombre: comunidad.nombre,
         establecimientos: comunidad.establecimientos,
-        usuarios: comunidad.usuarios
+        usuarios: comunidad.usuarios,
+        activo: comunidad.activo
     }));
 
     req.body.comunidades = comunidadesParseadas;
