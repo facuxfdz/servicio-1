@@ -8,11 +8,22 @@ import MockServicioDeGradosDeConfianza from './servicioGradosConfianza/MockServi
 import * as dotenv from 'dotenv';
 import { aceptarPropuestaDeFusion } from './propuestasFusion/aceptacionPropuesta';
 import { deleteById, findById } from './propuestasFusion/propuestasStorage';
+import options from './swagger/options';
 
 const app = express();
 
 dotenv.config();
 
+const bodyParser = require("body-parser")
+const swaggerJsdoc = require("swagger-jsdoc")
+const swaggerUi = require("swagger-ui-express");
+
+const specs = swaggerJsdoc(options);
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(specs)
+)
 // Express middlewares
 app.use(express.json());
 // End of express middlewares
