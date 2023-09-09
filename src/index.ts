@@ -1,5 +1,4 @@
 import express from 'express';
-import Joi from 'joi';
 import Comunidad, { validateComunidad } from './types/Comunidad';
 
 const app = express();
@@ -10,7 +9,7 @@ app.use(express.json());
 // End of express middlewares
 
 // Routes
-app.get('/servicio-1', validateComunidad,(req, res) => {
+app.get('/fusiones-comunidades', validateComunidad,(req, res) => {
     const comunidades : Comunidad[] = req.body.comunidades;
     console.log(comunidades)
     res.json(req.body);

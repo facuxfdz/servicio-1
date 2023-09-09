@@ -5,10 +5,21 @@ type Comunidad  = {
     id: number;
     nombre: string;
     establecimientos: Establecimiento[];
+    usuarios: Usuario[]
 }
 
 type Establecimiento = {
-    id: string;
+    id: number;
+    servicios: Servicio[];
+}
+
+type Usuario = {
+    id: number;
+    nombre: string;
+}
+
+type Servicio = {
+    id: number;
 }
 
 const comunidadSchema = Joi.object({
@@ -16,7 +27,14 @@ const comunidadSchema = Joi.object({
         nombre: Joi.string().required(),
         id: Joi.number().required(),
         establecimientos: Joi.array().items(Joi.object({
-            id: Joi.string()
+            id: Joi.number().required(),
+            servicios: Joi.array().items(Joi.object({
+                id: Joi.number().required()
+            })).required()
+        })).required(),
+        usuarios: Joi.array().items(Joi.object({
+            id: Joi.number().required(),
+            nombre: Joi.string()
         })).required()
     })).required()
 });
@@ -34,6 +52,18 @@ export const validateComunidad = (req: express.Request, res: express.Response, n
         id: parseInt(comunidad.id.toString()),
         nombre: comunidad.nombre,
         establecimientos: comunidad.establecimientos
+            .map((establecimiento) => ({
+                id: parseInt(establecimiento.id.toString()),
+                servicios: establecimiento.servicios
+                    .map((servicio) => ({
+                        id: parseInt(servicio.id.toString())
+                    }))
+            })),
+        usuarios: comunidad.usuarios
+            .map((usuario) => ({
+                id: parseInt(usuario.id.toString()),
+                nombre: usuario.nombre
+            }))
     }));
 
     req.body.comunidades = comunidadesParseadas;
