@@ -1,8 +1,8 @@
 import Comunidad from "./Comunidad";
 
 type PropuestaFusion = {
-    comunidades: Comunidad[];
-    fecha: Date
+    id: number;
+    comunidadesAFusionar: Comunidad[];
 }
 
-export default PropuestaFusion
+export default PropuestaFusion;
