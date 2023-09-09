@@ -1,6 +1,5 @@
 import express from 'express';
 import Joi from 'joi';
-import { sugerirFusionComunidad } from '../fusionComunidades';
 
 
 
@@ -8,7 +7,6 @@ type Comunidad  = {
     id: number;
     nombre: string;
     establecimientos: Establecimiento[];
-    usuarios: Usuario[];
 }
 
 export type Establecimiento = {
@@ -20,28 +18,15 @@ export type Servicio = {
     id: number;
 }
 
-export type Usuario = {
-    id: number;
-    nombre: string; 
-    email: string;
-    password: string;
-}
-
 const comunidadSchema = Joi.object({
     comunidades: Joi.array().items(Joi.object({
         nombre: Joi.string().required(),
         id: Joi.number().required(),
         establecimientos: Joi.array().items(Joi.object({
-            id: Joi.number().required(),
+            id: Joi.string().required(),
             servicios: Joi.array().items(Joi.object({
                 id: Joi.number().required()
             })).required()
-        })).required(),
-        usuarios: Joi.array().items(Joi.object({
-            id: Joi.number().required(),
-            nombre: Joi.string().required(),
-            email: Joi.string().required(),
-            password: Joi.string().required()
         })).required()
     })).required()
 });
@@ -58,8 +43,7 @@ export const validateComunidad = (req: express.Request, res: express.Response, n
     const comunidadesParseadas: Comunidad[] = comunidades.map((comunidad) => ({
         id: parseInt(comunidad.id.toString()),
         nombre: comunidad.nombre,
-        establecimientos: comunidad.establecimientos,
-        usuarios: comunidad.usuarios
+        establecimientos: comunidad.establecimientos
     }));
 
     req.body.comunidades = comunidadesParseadas;
@@ -68,6 +52,4 @@ export const validateComunidad = (req: express.Request, res: express.Response, n
 };
 // End of custom validation middlewares
 
-
 export default Comunidad
-

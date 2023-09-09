@@ -1,1 +1,0 @@
-cantminpersonas = 0.05
