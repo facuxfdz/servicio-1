@@ -3,11 +3,13 @@ import Comunidad, { validateComunidad } from './types/Comunidad';
 import PropuestaFusion from './types/PropuestaFusion';
 import { generarPropuestaFusion } from './fusionComunidades';
 import CriterioFusion from './criteriosFusion/CriterioFusion';
-import { CriterioCoincidenciaEstablecimientos, CriterioCoincidenciaServicios, CriterioMismoGradoConfianza } from './criteriosFusion/CriteriosDeFusion';
+import { CriterioCoincidenciaEstablecimientos, CriterioCoincidenciaServicios, CriterioCoincidenciaUsuarios, CriterioMismoGradoConfianza } from './criteriosFusion/CriteriosDeFusion';
 import MockServicioDeGradosDeConfianza from './servicioGradosConfianza/MockServicioDeGradosDeConfianza';
+import * as dotenv from 'dotenv';
 
 const app = express();
 
+dotenv.config();
 
 // Express middlewares
 app.use(express.json());
@@ -21,7 +23,8 @@ app.get('/fusiones-comunidades', validateComunidad, (req, res) => {
     const criteriosFusion: CriterioFusion[] = [
         new CriterioCoincidenciaEstablecimientos(),
         new CriterioCoincidenciaServicios(),
-        new CriterioMismoGradoConfianza(implementacionServicioGradosConfianza)
+        new CriterioMismoGradoConfianza(implementacionServicioGradosConfianza),
+        new CriterioCoincidenciaUsuarios()
     ];
     const propuestasDeFusion: PropuestaFusion[] = generarPropuestaFusion(comunidades, criteriosFusion);
     res.json(propuestasDeFusion);
