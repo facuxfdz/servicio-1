@@ -9,3 +9,10 @@ export const save = (propuesta : PropuestaFusion) => {
 export const findById = (id : number) => {
     return propuestas.find(propuesta => propuesta.id === id) || null;
 }
+
+export const deleteById = (id : number) => {
+    const index = propuestas.findIndex(propuesta => propuesta.id === id);
+    if (index !== -1) {
+        propuestas.splice(index, 1);
+    }
+}

@@ -1,7 +1,7 @@
 import Comunidad, { Establecimiento, Usuario } from "../types/Comunidad";
 import PropuestaFusion from "../types/PropuestaFusion";
 import { generarId } from "../utils/generadorIdPropuestas";
-import { findById } from "./propuestasStorage";
+import { deleteById, findById } from "./propuestasStorage";
 
 export function aceptarPropuestaDeFusion(idPropuesta: number) {
     // Encontrar la propuesta de fusión por su ID
@@ -18,9 +18,13 @@ export function aceptarPropuestaDeFusion(idPropuesta: number) {
             establecimientos: fusionarEstablecimientos(comunidadesAFusionar),
             usuarios: fusionarUsuarios(comunidadesAFusionar),
         };
-
+        
+        // Borro la propuesta de mi storage
+        deleteById(idPropuesta);
         // Devolver la nueva comunidad fusionada
         return nuevaComunidad;
+    }else{
+        console.log(`No existe una propuesta con el id ${idPropuesta}`);
     }
 
     return null;
