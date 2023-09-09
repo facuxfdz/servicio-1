@@ -2,53 +2,32 @@ import Comunidad, { Establecimiento, Servicio } from "./types/Comunidad";
 
 export function sugerirFusionComunidad (comunidades: Comunidad[]){
 
-    const comunidadesCompatibles: Comunidad[][] = [];
-
+    const comunidadesCompatibles: Comunidad[] = [];
+    const comunidadesPropuestas: Comunidad[] = [];
 
     
-    for(let i = 0; i < comunidades.length-1; i++){ //[a,b,c,d,e] => [a,b] [b,c] [c,d] [d,e]
-        var comunidadAux; //= comunidades[i+1];
+    for(let i = 0; i < comunidades.length -1; i++){
+        var comunidadAux = comunidades[i+1];
         
-        for(let j = i+1; j < comunidades.length; j++){ //[a,b,c,d,e] => [a,b] [a,c] [a,d] [a,e] VA EL -1?????????????????????????'
-            comunidadAux = comunidades[j];
+        if(cumpleTodasLasCondiciones(comunidades[i], comunidadAux)){
 
-            //verificar que i no este dentro de la lista de compatibles
+            //Agrupamos las comunidades para la propuesta
+            comunidadesCompatibles.push(comunidades[i]);
+            comunidadesCompatibles.push(comunidadAux);
             
+            //Como ya van a ser parte de una propuesta, las meto en una lista que voy a usar para filtrar la general.
+            comunidadesPropuestas.push(comunidades[i]);
+            comunidadesPropuestas.push(comunidadAux);
 
-            if(cumpleTodasLasCondiciones(comunidades[i], comunidadAux)){
-
-                //[a,j,e,f,d] -> Iterar desde j hasta de la lista checkeando que cada elemento sea compatible con el resto.
-
-                //agrupamos las comunidades a la propuestas
-                comunidadesCompatibles.push([comunidades[i], comunidadAux]); // [[a,j],[d,e],[a,e]] => [[a,j,e],[d,e]]
-                
-
-                //console.log(comunidadesCompatibles);
-
-            }
         }
+        
+       // print();
 
-        console.log("Se termino de analizar la comunidad " + comunidades[i].nombre);
+        console.log("Nada es compatible.");
     
 
     }
 
-    if(comunidadesCompatibles.length == 0){
-    console.log("Las comunidades no son compatibles.");
-    }
-
-    else{
-        console.log("Las comunidades compatibles son: "); //TODO esto es para debug
-        //muestro lo que tiene comunidades compatibles
-        for(let i = 0; i < comunidadesCompatibles.length; i++){
-                    console.log(JSON.stringify(comunidadesCompatibles[i]));
-        }
-    }
-
-
-
-    //retornar las comunidades que estan en la lista de propuestas
-    return comunidadesCompatibles;
 }
 
 function cumpleTodasLasCondiciones(comunidad1: Comunidad, comunidad2: Comunidad){
@@ -59,17 +38,15 @@ function cumpleTodasLasCondiciones(comunidad1: Comunidad, comunidad2: Comunidad)
 function coincidenEstablecimientos (comunidad1: Comunidad, comunidad2: Comunidad){
 
      //Esto es el 75%
-    const minCoincidencias = (Math.min(comunidad1.establecimientos.length, comunidad2.establecimientos.length) * 0.75);
+    const minCoincidencias = Math.floor(Math.min(comunidad1.establecimientos.length, comunidad2.establecimientos.length) * 0.75);
 
     let coincidencias = 0;
 
     comunidad1.establecimientos.forEach( (establecimiento1) => {
-        if (JSON.stringify(comunidad2.establecimientos.includes(establecimiento1))){
+        if (comunidad2.establecimientos.includes(establecimiento1)){
         coincidencias++;
         }
     })
-
-//   if (JSON.stringify(comunidad2.establecimientos.includes(establecimiento1))){
 
    return coincidencias > minCoincidencias;
 }
@@ -80,12 +57,12 @@ function coincidenServicios (comunidad1: Comunidad, comunidad2: Comunidad){
 
     let serviciosComuna2 = obtenerServicios(comunidad2.establecimientos)
     //Esto es el 75%
-    const minCoincidencias = Math.min(serviciosComuna1.length , serviciosComuna2.length) * 0.75;
+    const minCoincidencias = Math.floor(Math.min(serviciosComuna1.length , serviciosComuna2.length) * 0.75);
 
     let coincidencias = 0;
    
     serviciosComuna1.forEach( (servicio1) => {
-        if (JSON.stringify(serviciosComuna2.includes(servicio1))){
+        if (serviciosComuna2.includes(servicio1)){
         coincidencias++;
         }
     })
@@ -101,12 +78,12 @@ function coincidenGradoConfianza(comunidad1: Comunidad, comunidad2: Comunidad){
 function coincidenUsuarios(comunidad1: Comunidad, comunidad2: Comunidad) {
     
      //Esto es el 5%
-    const minCoincidencias = (Math.min(comunidad1.usuarios.length, comunidad2.usuarios.length) * 0.05);
+    const minCoincidencias = Math.floor(Math.min(comunidad1.usuarios.length, comunidad2.usuarios.length) * 0.05);
 
     let coincidencias = 0;
 
     comunidad1.usuarios.forEach( (usuario1) => {
-        if (JSON.stringify(comunidad2.usuarios.includes(usuario1))){
+        if (comunidad2.usuarios.includes(usuario1)){
         coincidencias++;
         }
     })
