@@ -3,7 +3,8 @@ import Comunidad, { validateComunidad } from './types/Comunidad';
 import PropuestaFusion from './types/PropuestaFusion';
 import { generarPropuestaFusion } from './fusionComunidades';
 import CriterioFusion from './criteriosFusion/CriterioFusion';
-import { CriterioCoincidenciaEstablecimientos, CriterioCoincidenciaServicios } from './criteriosFusion/CriteriosDeFusion';
+import { CriterioCoincidenciaEstablecimientos, CriterioCoincidenciaServicios, CriterioMismoGradoConfianza } from './criteriosFusion/CriteriosDeFusion';
+import MockServicioDeGradosDeConfianza from './servicioGradosConfianza/MockServicioDeGradosDeConfianza';
 
 const app = express();
 
@@ -13,10 +14,16 @@ app.use(express.json());
 // End of express middlewares
 
 // Routes
-app.get('/fusiones-comunidades', validateComunidad,(req, res) => {
-    const comunidades : Comunidad[] = req.body.comunidades;
-    const criteriosFusion : CriterioFusion[] = [new CriterioCoincidenciaEstablecimientos(),new CriterioCoincidenciaServicios()];
-    const propuestasDeFusion: PropuestaFusion[] = generarPropuestaFusion(comunidades,criteriosFusion);
+app.get('/fusiones-comunidades', validateComunidad, (req, res) => {
+    const comunidades: Comunidad[] = req.body.comunidades;
+    const implementacionServicioGradosConfianza = new MockServicioDeGradosDeConfianza();
+
+    const criteriosFusion: CriterioFusion[] = [
+        new CriterioCoincidenciaEstablecimientos(),
+        new CriterioCoincidenciaServicios(),
+        new CriterioMismoGradoConfianza(implementacionServicioGradosConfianza)
+    ];
+    const propuestasDeFusion: PropuestaFusion[] = generarPropuestaFusion(comunidades, criteriosFusion);
     res.json(propuestasDeFusion);
 });
 

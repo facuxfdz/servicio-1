@@ -1,3 +1,4 @@
+import ServicioDeGradosDeConfianza from "../servicioGradosConfianza/ServicioDeGradosDeConfianza";
 import Comunidad from "../types/Comunidad";
 import CriterioFusion from "./CriterioFusion";
 
@@ -67,3 +68,16 @@ export class CriterioCoincidenciaEstablecimientos implements CriterioFusion {
         return porcentajeCoincidencia > 75; // Cambiar el 75 por el porcentaje deseado
     }
 }
+
+export class CriterioMismoGradoConfianza implements CriterioFusion {
+    constructor(private servicioGradosConfianza: ServicioDeGradosDeConfianza) {}
+
+    sonCompatibles(comunidad1: Comunidad, comunidad2: Comunidad): boolean {
+        const gradoConfianzaComunidad1 = this.servicioGradosConfianza.obtenerGradosDeConfianza(comunidad1);
+        const gradoConfianzaComunidad2 = this.servicioGradosConfianza.obtenerGradosDeConfianza(comunidad2);
+
+        return gradoConfianzaComunidad1 === gradoConfianzaComunidad2;
+    }
+}
+
+
