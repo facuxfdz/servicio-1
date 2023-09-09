@@ -7,6 +7,7 @@ import { CriterioCoincidenciaEstablecimientos, CriterioCoincidenciaServicios, Cr
 import MockServicioDeGradosDeConfianza from './servicioGradosConfianza/MockServicioDeGradosDeConfianza';
 import * as dotenv from 'dotenv';
 import { aceptarPropuestaDeFusion } from './propuestasFusion/aceptacionPropuesta';
+import { deleteById, findById } from './propuestasFusion/propuestasStorage';
 
 const app = express();
 
@@ -28,6 +29,10 @@ app.get('/fusiones-comunidades', validateComunidad, (req, res) => {
         new CriterioCoincidenciaUsuarios()
     ];
     const propuestasDeFusion: PropuestaFusion[] = generarPropuestaFusion(comunidades, criteriosFusion);
+    if(propuestasDeFusion.length === 0){
+        res.status(404).json({ mensaje: 'No se pudo obtener ninguna propuesta de fusión' });
+        return;
+    }
     res.json(propuestasDeFusion);
 });
 
@@ -44,6 +49,16 @@ app.get('/aceptar-fusion', (req, res) => {
     }
 });
 
+app.get('/rechazar-fusion', (req, res) => {
+    const idPropuesta = parseInt(req.query.idPropuesta as string);
+    const propuesta = findById(idPropuesta);
+    if(!propuesta){
+        res.status(404).json({ mensaje: 'Propuesta de fusión no encontrada' });
+        return;
+    }
+    deleteById(idPropuesta);
+    res.json({ mensaje: 'Propuesta de fusión ' + idPropuesta + ' rechazada' });
+});
 // End of routes
 
 // Start server
