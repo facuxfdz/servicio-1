@@ -7,6 +7,7 @@ export function aceptarPropuestaDeFusion(idPropuesta: number) {
     // Encontrar la propuesta de fusión por su ID
     const propuestaAceptada : PropuestaFusion | null = findById(idPropuesta);
 
+    // Si existe la propuesta
     if (propuestaAceptada) {
         // Obtener las comunidades a fusionar de la propuesta
         const comunidadesAFusionar = propuestaAceptada.comunidadesAFusionar;
@@ -42,7 +43,7 @@ function fusionarEstablecimientos(comunidadesAFusionar: Comunidad[]): Establecim
         });
     });
 
-    return Array.from(establecimientosFusionados);
+    return Array.from(establecimientosFusionados); //why array
 }
 
 

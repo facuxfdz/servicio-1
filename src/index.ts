@@ -67,6 +67,7 @@ app.get('/rechazar-fusion', (req, res) => {
         res.status(404).json({ mensaje: 'Propuesta de fusión no encontrada' });
         return;
     }
+    //Si la propuesta existe, la borramos. Pero sigue estando en el historico (el PropuestaFusionRecord)
     deleteById(idPropuesta);
     res.json({ mensaje: 'Propuesta de fusión ' + idPropuesta + ' rechazada' });
 });

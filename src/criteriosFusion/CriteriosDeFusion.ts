@@ -43,7 +43,7 @@ export class CriterioCoincidenciaServicios implements CriterioFusion {
             });
         });
 
-        const porcentajeCoincidencia = (serviciosComunes.length / totalServiciosComunidad1) * 100;
+        const porcentajeCoincidencia = (serviciosComunes.length / Math.min(totalServiciosComunidad1, totalServiciosComunidad2)) * 100;
 
         return porcentajeCoincidencia > parseInt(process.env.PORCENTAJE_COINCIDENCIA_SERVICIOS || '75'); // Cambiar el 75 por el porcentaje deseado
     }
@@ -62,7 +62,7 @@ export class CriterioCoincidenciaEstablecimientos implements CriterioFusion {
             comunidad2.establecimientos.some(establecimiento2 => establecimiento1.id === establecimiento2.id)
         );
 
-        const porcentajeCoincidencia = (establecimientosComunes.length / totalEstablecimientos1) * 100;
+        const porcentajeCoincidencia = (establecimientosComunes.length / Math.min(totalEstablecimientos1, totalEstablecimientos2)) * 100;
 
         return porcentajeCoincidencia > parseInt(process.env.PORCENTAJE_COINCIDENCIA_ESTABLECIMIENTOS || '75'); // Cambiar el 75 por el porcentaje deseado
     }

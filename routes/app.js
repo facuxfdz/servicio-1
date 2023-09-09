@@ -11,6 +11,44 @@
  *         nombre:
  *           type: string
  *           description: Nombre de la comunidad
+ *         establecimientos:
+ *           type: array
+ *           items:
+ *            $ref: '#/components/schemas/Establecimiento'
+ *           description: Establecimientos de la comunidad
+ *         usuarios:
+ *           type: array
+ *           items:
+ *            $ref: '#/components/schemas/Usuario'
+ *           description: Usuarios de la comunidad
+ * 
+ *     Establecimiento:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Establecimiento que es de interés a la comunidad
+ *         servicios:
+ *           type: array
+ *           items:
+ *            $ref: '#/components/schemas/Servicio'
+ *           description: Servicios dentro de un establecimiento
+ * 
+ *     Usuario:
+ *       type: object
+ *       properties:
+ *         id: 
+ *           type: integer
+ *         nombre:
+ *           type: string
+ *           description: username
+ * 
+ *     Servicio:   
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ * 
  *     PropuestaFusion:
  *       type: object
  *       properties:
@@ -39,6 +77,8 @@
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/PropuestaFusion'
+ *       404:
+ *         description: Hubo un error al obtener las propuestas.
  */
 
 /**
