@@ -3,8 +3,7 @@ import Comunidad, { validateComunidad } from './types/Comunidad';
 import PropuestaFusion from './types/PropuestaFusion';
 import { generarPropuestaFusion } from './fusionComunidades';
 import CriterioFusion from './criteriosFusion/CriterioFusion';
-import CriterioCoincidenciaEstablecimientos from './criteriosFusion/CriterioCoincidenciaEstablecimientos';
-import CriterioCoincidenciaServicios from './criteriosFusion/CriterioCoincidenciaServicios';
+import { CriterioCoincidenciaEstablecimientos, CriterioCoincidenciaServicios } from './criteriosFusion/CriteriosDeFusion';
 
 const app = express();
 

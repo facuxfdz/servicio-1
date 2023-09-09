@@ -1,0 +1,69 @@
+import Comunidad from "../types/Comunidad";
+import CriterioFusion from "./CriterioFusion";
+
+export class CriterioCoincidenciaUsuarios implements CriterioFusion {
+    sonCompatibles(comunidad1: Comunidad, comunidad2: Comunidad): boolean {
+        const totalUsuariosComunidad1 = comunidad1.usuarios.length;
+        const totalUsuariosComunidad2 = comunidad2.usuarios.length;
+
+        if (totalUsuariosComunidad1 === 0 || totalUsuariosComunidad2 === 0) {
+            return false; // Evitar divisiones por cero
+        }
+
+        const usuariosComunes = comunidad1.usuarios.filter(usuario1 => {
+            return comunidad2.usuarios.some(usuario2 => usuario1.id === usuario2.id);
+        });
+
+        const porcentajeCoincidencia = (usuariosComunes.length / Math.min(totalUsuariosComunidad1, totalUsuariosComunidad2)) * 100;
+
+        return porcentajeCoincidencia > 5; // Cambiar el 5 por el porcentaje deseado
+    }
+}
+
+
+export class CriterioCoincidenciaServicios implements CriterioFusion {
+    sonCompatibles(comunidad1: Comunidad, comunidad2: Comunidad): boolean {
+        const totalServiciosComunidad1 = comunidad1.establecimientos.reduce((total, establecimiento) => {
+            return total + establecimiento.servicios.length;
+        }, 0);
+
+        const totalServiciosComunidad2 = comunidad2.establecimientos.reduce((total, establecimiento) => {
+            return total + establecimiento.servicios.length;
+        }, 0);
+
+        if (totalServiciosComunidad1 === 0 || totalServiciosComunidad2 === 0) {
+            return false; // Evitar divisiones por cero
+        }
+
+        const serviciosComunes = comunidad1.establecimientos.flatMap(establecimiento1 => {
+            return establecimiento1.servicios.filter(servicio1 => {
+                return comunidad2.establecimientos.some(establecimiento2 => {
+                    return establecimiento2.servicios.some(servicio2 => servicio1.id === servicio2.id);
+                });
+            });
+        });
+
+        const porcentajeCoincidencia = (serviciosComunes.length / totalServiciosComunidad1) * 100;
+
+        return porcentajeCoincidencia > 75; // Cambiar el 75 por el porcentaje deseado
+    }
+}
+
+export class CriterioCoincidenciaEstablecimientos implements CriterioFusion {
+    sonCompatibles(comunidad1: Comunidad, comunidad2: Comunidad): boolean {
+        const totalEstablecimientos1 = comunidad1.establecimientos.length;
+        const totalEstablecimientos2 = comunidad2.establecimientos.length;
+
+        if (totalEstablecimientos1 === 0 || totalEstablecimientos2 === 0) {
+            return false; // Evitar divisiones por cero
+        }
+
+        const establecimientosComunes = comunidad1.establecimientos.filter(establecimiento1 =>
+            comunidad2.establecimientos.some(establecimiento2 => establecimiento1.id === establecimiento2.id)
+        );
+
+        const porcentajeCoincidencia = (establecimientosComunes.length / totalEstablecimientos1) * 100;
+
+        return porcentajeCoincidencia > 75; // Cambiar el 75 por el porcentaje deseado
+    }
+}
