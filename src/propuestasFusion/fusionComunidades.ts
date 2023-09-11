@@ -6,7 +6,7 @@ import { save } from "./propuestasStorage";
 
 interface PropuestaFusionRecord {
     propuesta: PropuestaFusion;
-    fechaGeneracion: Date; //TODO:PARA QUE ESTA ESTO???
+    fechaGeneracion: Date; 
 }
 
 // Crear un mapa para mantener un registro de las propuestas
